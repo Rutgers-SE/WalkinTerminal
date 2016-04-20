@@ -24,14 +24,34 @@ public class MainActivity extends AppCompatActivity {
         } catch (URISyntaxException e) {}
     }
 
-
-
+    private String deviceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        deviceName = "walking-terminal";
         super.onCreate(savedInstanceState);
         mSocket.connect(); // Something
-        setContentView(R.layout.activity_main);
+
+
+        try {
+            JSONObject devSetupPayload = new JSONObject();
+
+
+            devSetupPayload.put("name", deviceName)
+                    .put("deviceType", "terminal");
+
+
+            mSocket.emit("dev:setup", devSetupPayload);
+
+            setContentView(R.layout.activity_main);
+        } catch (JSONException e) {
+            return;
+        }
+
+
+
+
     }
 
     public void attemptSend(View view) {
