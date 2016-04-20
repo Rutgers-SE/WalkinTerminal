@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TestDevice</string>
+    <string name="sendButton">Send</string>
+</resources>
