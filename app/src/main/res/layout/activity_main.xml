@@ -65,4 +65,31 @@
         android:layout_below="@+id/openQr"
         android:layout_alignParentStart="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/openQr"
+        android:onClick="sendQRData"
+        android:id="@+id/sendQrData"
+        android:text="Send QR Data"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sendQrData"
+        android:id="@+id/qrLoader"
+        android:onClick="loadQR"
+        android:text="load qr code"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/qrData"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/qrLoader"
+        android:id="@+id/imgView" />
+
 </RelativeLayout>

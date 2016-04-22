@@ -2,6 +2,8 @@ package com.example.alex.testdevice;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -11,14 +13,19 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -50,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         mSocket.connect(); // Something
 
 
+
         try {
             JSONObject devSetupPayload = new JSONObject();
 
@@ -62,10 +70,45 @@ public class MainActivity extends AppCompatActivity {
 
             setContentView(R.layout.activity_main);
         } catch (JSONException e) {
+            displayToast(e);
             return;
         }
 
 
+    }
+
+    private void displayToast(Exception e) {
+        Log.d("TestDevice", e.toString());
+        Context ctx = getApplicationContext();
+        CharSequence failText = e.getMessage();
+        int duration = Toast.LENGTH_LONG;
+        Toast fail = Toast.makeText(ctx, failText, duration);
+        fail.show();
+    }
+
+    private void toasty(String msg) {
+        Context ctx = getApplicationContext();
+        CharSequence failText = msg;
+        int duration = Toast.LENGTH_LONG;
+        Toast fail = Toast.makeText(ctx, failText, duration);
+        fail.show();
+
+    }
+
+    public void sendQRData(View view) {
+        try {
+            TextView txtView = (TextView) findViewById(R.id.qrData);
+            BarcodeDetector detector =
+                    new BarcodeDetector.Builder(getApplicationContext())
+                            .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
+                            .build();
+            if(!detector.isOperational()){
+                txtView.setText("Could not set up the detector!");
+                return;
+            }
+        } catch (Exception e) {
+            displayToast(e);
+        }
     }
 
     public void attemptSend(View view) {
@@ -96,7 +139,24 @@ public class MainActivity extends AppCompatActivity {
 
             mSocket.emit("dev:setup", devSetupPayload);
         } catch (JSONException e) {
+            displayToast(e);
             return;
+        }
+
+    }
+
+    public void loadQR(View view) {
+        toasty("That good good");
+        try {
+            ImageView myImageView = (ImageView) findViewById(R.id.imgView);
+
+            Bitmap myBitmap = BitmapFactory.decodeResource(
+                    getApplicationContext().getResources(),
+                    R.drawable.qrimg);
+
+            myImageView.setImageBitmap(myBitmap);
+        } catch (Exception e) {
+            displayToast(e);
         }
 
     }
@@ -110,12 +170,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         } catch (Exception e) {
-            Log.d("TestDevice", e.toString());
-            Context ctx = getApplicationContext();
-            CharSequence failText = "Could not open the camera";
-            int duration = Toast.LENGTH_LONG;
-            Toast fail = Toast.makeText(ctx, failText, duration);
-            fail.show();
+            displayToast(e);
         }
     }
 

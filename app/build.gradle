@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.github.nkzawa:socket.io-client:0.3.0'
     compile 'com.google.zxing:core:3.0.0'
+    compile 'com.google.android.gms:play-services:7.8+'
 }
