@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -21,7 +22,7 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity  {
 
     private CompoundButton autoFocus;
     private CompoundButton useFlash;
@@ -38,11 +39,36 @@ public class MainActivity extends Activity implements View.OnClickListener {
     {
         try {
             mSocket = IO.socket("http://gg-is.herokuapp.com");
+            //mSocket = IO.socket("http://f75bd6e1.ngrok.io");
+
         } catch (URISyntaxException e) {}
     }
 
     private String deviceName;
     private String deviceType;
+
+    public String URL;
+    public void updateurl(View view){
+        EditText newurl = (EditText) findViewById(R.id.editText);
+        URL = newurl.getText().toString().trim();
+
+        mSocket.disconnect();
+        try {
+            mSocket = IO.socket(URL);
+            mSocket.connect();
+        } catch (URISyntaxException e) {return;}
+        try {
+            JSONObject devSetupPayload = new JSONObject();
+            devSetupPayload.put("name", "entrance-terminal")
+                    .put("deviceType", "terminal");
+            mSocket.emit("dev:setup", devSetupPayload);
+            setContentView(R.layout.activity_main);
+        } catch (JSONException e) {
+            return;
+        }
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +95,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
             return;
         }
 
-        findViewById(R.id.read_barcode).setOnClickListener(this);
+     //   findViewById(R.id.read_barcode).setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.read_barcode) {
+    public void Clicki(View v) {
             // launch barcode activity.
             Intent intent = new Intent(this, BarcodeCaptureActivity.class);
             intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
             intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
 
             startActivityForResult(intent, RC_BARCODE_CAPTURE);
-        }
 
     }
 

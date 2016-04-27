@@ -30,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/read_barcode"
+        android:onClick="Clicki"
         android:id="@+id/read_barcode"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -51,7 +52,7 @@
         android:text="@string/use_flash"
         android:id="@+id/use_flash"
         android:checked="false"
-        android:layout_above="@+id/sendQrData"
+        android:layout_above="@+id/updateurl"
         android:layout_alignRight="@+id/auto_focus"
         android:layout_alignEnd="@+id/auto_focus" />
 
@@ -71,10 +72,19 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="sendQRData"
-        android:id="@+id/sendQrData"
-        android:text="Send Code"
+        android:onClick="updateurl"
+        android:id="@+id/updateurl"
+        android:text="Update URL"
         android:layout_below="@+id/imageView2"
         android:layout_toRightOf="@+id/read_barcode"
         android:layout_toEndOf="@+id/read_barcode" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_alignBottom="@+id/use_flash"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/updateurl"
+        android:layout_alignEnd="@+id/updateurl" />
 </RelativeLayout>
